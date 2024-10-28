@@ -37,7 +37,7 @@ resource "google_service_account" "workload_identity_sa" {
 }
 
 resource "google_container_cluster" "primary" {
-  provider = google-beta
+  provider = google
 
   name     = "${var.prefix}-gke"
   location = var.region
@@ -77,7 +77,7 @@ resource "google_container_cluster" "primary" {
 }
 
 resource "google_container_node_pool" "primary_nodes" {
-  provider = google-beta
+  provider = google
 
   name     = "${var.prefix}-node-pool"
   location = var.region

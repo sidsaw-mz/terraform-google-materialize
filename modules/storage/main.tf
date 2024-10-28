@@ -10,13 +10,19 @@ resource "google_storage_bucket" "materialize" {
     enabled = true
   }
 
-  lifecycle_rule {
-    condition {
-      age = 30
-    }
-    action {
-      type          = "SetStorageClass"
-      storage_class = "NEARLINE"
+  dynamic "lifecycle_rule" {
+    for_each = var.lifecycle_rules
+    content {
+      action {
+        type          = lifecycle_rule.value.action.type
+        storage_class = lifecycle_rule.value.action.storage_class
+      }
+      condition {
+        age                = lifecycle_rule.value.condition.age
+        created_before     = lifecycle_rule.value.condition.created_before
+        with_state         = lifecycle_rule.value.condition.with_state
+        num_newer_versions = lifecycle_rule.value.condition.num_newer_versions
+      }
     }
   }
 

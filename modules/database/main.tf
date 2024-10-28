@@ -21,10 +21,12 @@ resource "google_sql_database_instance" "materialize" {
     }
 
     maintenance_window {
-      day          = 7 # Sunday
-      hour         = 3 # 3 AM
+      day          = 7
+      hour         = 3
       update_track = "stable"
     }
+
+    user_labels = var.labels
   }
 
   deletion_protection = true

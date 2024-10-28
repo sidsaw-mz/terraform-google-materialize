@@ -32,18 +32,20 @@ variable "network_config" {
 variable "gke_config" {
   description = "GKE cluster configuration"
   type = object({
-    node_count   = number
-    machine_type = string
-    disk_size_gb = number
-    min_nodes    = number
-    max_nodes    = number
+    node_count     = number
+    machine_type   = string
+    disk_size_gb   = number
+    min_nodes      = number
+    max_nodes      = number
+    node_locations = list(string)
   })
   default = {
-    node_count   = 3
-    machine_type = "e2-standard-4"
-    disk_size_gb = 100
-    min_nodes    = 1
-    max_nodes    = 5
+    node_count     = 3
+    machine_type   = "e2-standard-4"
+    disk_size_gb   = 100
+    min_nodes      = 1
+    max_nodes      = 5
+    node_locations = []
   }
 }
 

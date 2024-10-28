@@ -8,7 +8,7 @@ module "materialize" {
 
   project_id = var.project_id
   region     = var.region
-  prefix     = "mz-prod"
+  prefix     = "mz-${var.environment}"
 
   network_config = {
     subnet_cidr   = "10.0.0.0/20"
@@ -17,11 +17,12 @@ module "materialize" {
   }
 
   gke_config = {
-    node_count   = 5
-    machine_type = "e2-standard-8"
-    disk_size_gb = 200
-    min_nodes    = 3
-    max_nodes    = 7
+    node_count     = 5
+    machine_type   = "e2-standard-8"
+    disk_size_gb   = 200
+    min_nodes      = 3
+    max_nodes      = 7
+    node_locations = var.node_locations
   }
 
   database_config = {
@@ -30,9 +31,11 @@ module "materialize" {
     password = var.database_password
   }
 
+  maintenance_window = var.maintenance_window
+
   labels = {
-    environment = "production"
+    environment = var.environment
+    team        = var.team
     managed_by  = "terraform"
-    team        = "data-platform"
   }
 }
