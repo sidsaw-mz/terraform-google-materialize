@@ -33,9 +33,9 @@ module "database" {
   prefix     = var.prefix
   network_id = module.gke.network_id
 
-  tier     = var.database_config.tier
-  db_version     = var.database_config.version
-  password = var.database_config.password
+  tier       = var.database_config.tier
+  db_version = var.database_config.version
+  password   = var.database_config.password
 
   labels = local.common_labels
 }
