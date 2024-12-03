@@ -2,7 +2,7 @@ resource "google_storage_bucket" "materialize" {
   name          = "${var.prefix}-storage-${var.project_id}"
   location      = var.region
   project       = var.project_id
-  force_destroy = false
+  force_destroy = true
 
   uniform_bucket_level_access = true
 

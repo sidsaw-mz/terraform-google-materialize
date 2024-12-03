@@ -11,9 +11,9 @@ resource "google_compute_network" "vpc" {
 resource "google_compute_route" "default_route" {
   name             = "${var.prefix}-default-route"
   project          = var.project_id
-  network         = google_compute_network.vpc.name
-  dest_range      = "0.0.0.0/0"
-  priority        = 1000
+  network          = google_compute_network.vpc.name
+  dest_range       = "0.0.0.0/0"
+  priority         = 1000
   next_hop_gateway = "default-internet-gateway"
 
   # Ensure this is destroyed before the network
@@ -51,17 +51,17 @@ resource "google_service_account" "gke_sa" {
 }
 
 resource "google_compute_global_address" "private_ip_address" {
-  provider = google
-  project  = var.project_id
-  name     = "${var.prefix}-private-ip"
-  purpose  = "VPC_PEERING"
-  address_type = "INTERNAL"
+  provider      = google
+  project       = var.project_id
+  name          = "${var.prefix}-private-ip"
+  purpose       = "VPC_PEERING"
+  address_type  = "INTERNAL"
   prefix_length = 16
-  network = google_compute_network.vpc.id
+  network       = google_compute_network.vpc.id
 }
 
 resource "google_service_networking_connection" "private_vpc_connection" {
-  provider = google
+  provider                = google
   network                 = google_compute_network.vpc.id
   service                 = "servicenetworking.googleapis.com"
   reserved_peering_ranges = [google_compute_global_address.private_ip_address.name]

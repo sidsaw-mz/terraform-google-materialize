@@ -28,7 +28,7 @@ module "gke" {
 module "database" {
   source = "./modules/database"
 
-  depends_on = [ module.gke ]
+  depends_on = [module.gke]
 
   database_name = var.database_config.db_name
   database_user = var.database_config.username

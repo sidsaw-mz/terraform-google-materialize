@@ -36,6 +36,8 @@ resource "google_sql_database" "materialize" {
   name     = var.database_name
   instance = google_sql_database_instance.materialize.name
   project  = var.project_id
+
+  deletion_policy = "ABANDON"
 }
 
 resource "google_sql_user" "materialize" {
@@ -43,4 +45,6 @@ resource "google_sql_user" "materialize" {
   instance = google_sql_database_instance.materialize.name
   password = var.password
   project  = var.project_id
+
+  deletion_policy = "ABANDON"
 }
