@@ -5,6 +5,7 @@ resource "google_compute_network" "vpc" {
 
   lifecycle {
     create_before_destroy = true
+    prevent_destroy       = false
   }
 }
 
@@ -58,6 +59,10 @@ resource "google_compute_global_address" "private_ip_address" {
   address_type  = "INTERNAL"
   prefix_length = 16
   network       = google_compute_network.vpc.id
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "google_service_networking_connection" "private_vpc_connection" {
@@ -65,6 +70,10 @@ resource "google_service_networking_connection" "private_vpc_connection" {
   network                 = google_compute_network.vpc.id
   service                 = "servicenetworking.googleapis.com"
   reserved_peering_ranges = [google_compute_global_address.private_ip_address.name]
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "google_service_account" "workload_identity_sa" {
