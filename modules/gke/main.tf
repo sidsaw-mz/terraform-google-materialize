@@ -2,6 +2,26 @@ resource "google_compute_network" "vpc" {
   name                    = "${var.prefix}-network"
   auto_create_subnetworks = false
   project                 = var.project_id
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "google_compute_route" "default_route" {
+  name             = "${var.prefix}-default-route"
+  project          = var.project_id
+  network         = google_compute_network.vpc.name
+  dest_range      = "0.0.0.0/0"
+  priority        = 1000
+  next_hop_gateway = "default-internet-gateway"
+
+  # Ensure this is destroyed before the network
+  depends_on = [google_compute_network.vpc]
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "google_compute_subnetwork" "subnet" {
@@ -30,6 +50,23 @@ resource "google_service_account" "gke_sa" {
   display_name = "GKE Service Account for Materialize"
 }
 
+resource "google_compute_global_address" "private_ip_address" {
+  provider = google
+  project  = var.project_id
+  name     = "${var.prefix}-private-ip"
+  purpose  = "VPC_PEERING"
+  address_type = "INTERNAL"
+  prefix_length = 16
+  network = google_compute_network.vpc.id
+}
+
+resource "google_service_networking_connection" "private_vpc_connection" {
+  provider = google
+  network                 = google_compute_network.vpc.id
+  service                 = "servicenetworking.googleapis.com"
+  reserved_peering_ranges = [google_compute_global_address.private_ip_address.name]
+}
+
 resource "google_service_account" "workload_identity_sa" {
   project      = var.project_id
   account_id   = "${var.prefix}-materialize-sa"
@@ -38,6 +75,16 @@ resource "google_service_account" "workload_identity_sa" {
 
 resource "google_container_cluster" "primary" {
   provider = google
+
+  deletion_protection = false
+
+  depends_on = [
+    google_service_account.gke_sa,
+    google_service_account.workload_identity_sa,
+    google_service_networking_connection.private_vpc_connection,
+    google_compute_subnetwork.subnet,
+    google_compute_route.default_route
+  ]
 
   name     = "${var.prefix}-gke"
   location = var.region
@@ -110,9 +157,17 @@ resource "google_container_node_pool" "primary_nodes" {
       mode = "GKE_METADATA"
     }
   }
+
+  lifecycle {
+    create_before_destroy = true
+
+    prevent_destroy = false
+  }
+
 }
 
 resource "google_service_account_iam_binding" "workload_identity" {
+  depends_on         = [google_service_account.workload_identity_sa]
   service_account_id = google_service_account.workload_identity_sa.name
   role               = "roles/iam.workloadIdentityUser"
   members = [

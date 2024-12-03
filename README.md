@@ -44,8 +44,8 @@ No resources.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_database_config"></a> [database\_config](#input\_database\_config) | Cloud SQL configuration | <pre>object({<br/>    tier     = string<br/>    version  = string<br/>    password = string<br/>  })</pre> | <pre>{<br/>  "password": null,<br/>  "tier": "db-custom-2-4096",<br/>  "version": "POSTGRES_15"<br/>}</pre> | no |
-| <a name="input_gke_config"></a> [gke\_config](#input\_gke\_config) | GKE cluster configuration | <pre>object({<br/>    node_count     = number<br/>    machine_type   = string<br/>    disk_size_gb   = number<br/>    min_nodes      = number<br/>    max_nodes      = number<br/>    node_locations = list(string)<br/>  })</pre> | <pre>{<br/>  "disk_size_gb": 100,<br/>  "machine_type": "e2-standard-4",<br/>  "max_nodes": 5,<br/>  "min_nodes": 1,<br/>  "node_count": 3,<br/>  "node_locations": []<br/>}</pre> | no |
+| <a name="input_database_config"></a> [database\_config](#input\_database\_config) | Cloud SQL configuration | <pre>object({<br/>    tier     = optional(string, "db-custom-2-4096")<br/>    version  = optional(string, "POSTGRES_15")<br/>    password = string<br/>    username = optional(string, "materialize")<br/>    db_name  = optional(string, "materialize")<br/>  })</pre> | n/a | yes |
+| <a name="input_gke_config"></a> [gke\_config](#input\_gke\_config) | GKE cluster configuration | <pre>object({<br/>    node_count     = number<br/>    machine_type   = string<br/>    disk_size_gb   = number<br/>    min_nodes      = number<br/>    max_nodes      = number<br/>    node_locations = list(string)<br/>  })</pre> | <pre>{<br/>  "disk_size_gb": 100,<br/>  "machine_type": "e2-standard-2",<br/>  "max_nodes": 5,<br/>  "min_nodes": 1,<br/>  "node_count": 3,<br/>  "node_locations": []<br/>}</pre> | no |
 | <a name="input_labels"></a> [labels](#input\_labels) | Labels to apply to all resources | `map(string)` | `{}` | no |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | Kubernetes namespace for Materialize | `string` | `"materialize"` | no |
 | <a name="input_network_config"></a> [network\_config](#input\_network\_config) | Network configuration for the GKE cluster | <pre>object({<br/>    subnet_cidr   = string<br/>    pods_cidr     = string<br/>    services_cidr = string<br/>  })</pre> | <pre>{<br/>  "pods_cidr": "10.48.0.0/14",<br/>  "services_cidr": "10.52.0.0/20",<br/>  "subnet_cidr": "10.0.0.0/20"<br/>}</pre> | no |
@@ -57,6 +57,7 @@ No resources.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_connection_strings"></a> [connection\_strings](#output\_connection\_strings) | Formatted connection strings for Materialize |
 | <a name="output_database"></a> [database](#output\_database) | Cloud SQL instance details |
 | <a name="output_gke_cluster"></a> [gke\_cluster](#output\_gke\_cluster) | GKE cluster details |
 | <a name="output_service_accounts"></a> [service\_accounts](#output\_service\_accounts) | Service account details |

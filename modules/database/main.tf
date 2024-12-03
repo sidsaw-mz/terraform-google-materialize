@@ -29,17 +29,17 @@ resource "google_sql_database_instance" "materialize" {
     user_labels = var.labels
   }
 
-  deletion_protection = true
+  deletion_protection = false
 }
 
 resource "google_sql_database" "materialize" {
-  name     = "materialize_db"
+  name     = var.database_name
   instance = google_sql_database_instance.materialize.name
   project  = var.project_id
 }
 
 resource "google_sql_user" "materialize" {
-  name     = "materialize_user"
+  name     = var.database_user
   instance = google_sql_database_instance.materialize.name
   password = var.password
   project  = var.project_id

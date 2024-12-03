@@ -38,6 +38,18 @@ variable "password" {
   sensitive   = true
 }
 
+variable "database_user" {
+  description = "The name of the database user"
+  default     = "materialize"
+  type        = string
+}
+
+variable "database_name" {
+  description = "The name of the database"
+  default     = "materialize"
+  type        = string
+}
+
 variable "labels" {
   description = "Labels to apply to resources"
   type        = map(string)

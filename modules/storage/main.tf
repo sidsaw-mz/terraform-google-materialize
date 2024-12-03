@@ -34,3 +34,8 @@ resource "google_storage_bucket_iam_member" "materialize_storage" {
   role   = "roles/storage.admin"
   member = "serviceAccount:${var.service_account}"
 }
+
+resource "google_storage_hmac_key" "materialize" {
+  project               = var.project_id
+  service_account_email = var.service_account
+}
