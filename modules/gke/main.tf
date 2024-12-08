@@ -74,6 +74,8 @@ resource "google_service_networking_connection" "private_vpc_connection" {
   lifecycle {
     create_before_destroy = true
   }
+
+  deletion_policy = "ABANDON"
 }
 
 resource "google_service_account" "workload_identity_sa" {
