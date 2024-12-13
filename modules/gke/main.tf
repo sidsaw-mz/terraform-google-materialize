@@ -178,7 +178,10 @@ resource "google_container_node_pool" "primary_nodes" {
 }
 
 resource "google_service_account_iam_binding" "workload_identity" {
-  depends_on         = [google_service_account.workload_identity_sa]
+  depends_on = [
+    google_service_account.workload_identity_sa,
+    google_container_cluster.primary
+  ]
   service_account_id = google_service_account.workload_identity_sa.name
   role               = "roles/iam.workloadIdentityUser"
   members = [
