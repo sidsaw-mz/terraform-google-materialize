@@ -15,7 +15,11 @@ provider "google" {
 }
 
 module "materialize" {
+  # Referencing the root module directory:
   source = "../.."
+
+  # Alternatively, you can use the GitHub source URL:
+  # source = "github.com/MaterializeInc/terraform-google-materialize?ref=v0.1.0"
 
   project_id = var.project_id
   region     = var.region
