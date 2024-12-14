@@ -40,11 +40,11 @@ variable "gke_config" {
     node_locations = list(string)
   })
   default = {
-    node_count     = 3
+    node_count     = 1
     machine_type   = "e2-standard-2"
-    disk_size_gb   = 100
+    disk_size_gb   = 50
     min_nodes      = 1
-    max_nodes      = 5
+    max_nodes      = 2
     node_locations = []
   }
 }

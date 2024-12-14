@@ -4,6 +4,12 @@ resource "google_sql_database_instance" "materialize" {
   region           = var.region
   project          = var.project_id
 
+  timeouts {
+    create = "60m"
+    update = "45m"
+    delete = "45m"
+  }
+
   settings {
     tier = var.tier
 
