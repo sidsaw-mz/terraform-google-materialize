@@ -55,3 +55,43 @@ module "storage" {
 
   labels = local.common_labels
 }
+
+module "operator" {
+  source = "./modules/operator"
+  count  = var.install_materialize_operator ? 1 : 0
+
+  depends_on = [
+    module.gke,
+    module.database,
+    module.storage
+  ]
+
+  region                     = var.region
+  prefix                     = var.prefix
+  operator_namespace         = var.namespace
+  storage_bucket_name        = module.storage.bucket_name
+  workload_identity_sa_email = module.gke.workload_identity_sa_email
+  hmac_access_id             = module.storage.hmac_access_id
+  hmac_secret                = module.storage.hmac_secret
+  operator_version           = var.operator_version
+  environmentd_version       = var.environmentd_version
+
+  instances = var.materialize_instances != null ? [
+    for instance in var.materialize_instances : {
+      name              = instance.name
+      namespace         = instance.namespace
+      database_name     = instance.database_name
+      database_username = var.database_config.username
+      database_password = var.database_config.password
+      database_host     = module.database.private_ip
+      cpu_request       = instance.cpu_request
+      memory_request    = instance.memory_request
+      memory_limit      = instance.memory_limit
+    }
+  ] : []
+
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
+}

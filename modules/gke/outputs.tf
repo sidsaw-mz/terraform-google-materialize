@@ -9,6 +9,10 @@ output "cluster_endpoint" {
   sensitive   = true
 }
 
+output "cluster_ca_certificate" {
+  value = google_container_cluster.primary.master_auth[0].cluster_ca_certificate
+}
+
 output "cluster_location" {
   description = "The location of the GKE cluster"
   value       = google_container_cluster.primary.location

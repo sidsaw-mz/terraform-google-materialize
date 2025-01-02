@@ -35,6 +35,29 @@ module "materialize" {
     environment = "simple"
     example     = "true"
   }
+
+  install_materialize_operator = true
+
+  # Once the operator is installed, you can define your Materialize instances here.
+  # Uncomment the following block (or provide your own instances) to configure them.
+  # materialize_instances = [
+  #   {
+  #     name           = "analytics"
+  #     namespace      = "materialize-environment"
+  #     database_name  = "analytics_db"
+  #     cpu_request    = "2"
+  #     memory_request = "4Gi"
+  #     memory_limit   = "4Gi"
+  #   },
+  #   {
+  #     name           = "production"
+  #     namespace      = "materialize-environment"
+  #     database_name  = "production_db"
+  #     cpu_request    = "4"
+  #     memory_request = "8Gi"
+  #     memory_limit   = "8Gi"
+  #   }
+  # ]
 }
 
 variable "project_id" {
