@@ -57,8 +57,7 @@ module "storage" {
 }
 
 module "operator" {
-  source = "/Users/biliev/projects/materialize/terraform-materialize/terraform-helm-materialize"
-  # source = "github.com/MaterializeInc/terraform-helm-materialize"
+  source = "github.com/MaterializeInc/terraform-helm-materialize?ref=v0.1.0"
 
   count = var.install_materialize_operator ? 1 : 0
 

@@ -38,7 +38,7 @@ The module has been tested with:
 |------|--------|---------|
 | <a name="module_database"></a> [database](#module\_database) | ./modules/database | n/a |
 | <a name="module_gke"></a> [gke](#module\_gke) | ./modules/gke | n/a |
-| <a name="module_operator"></a> [operator](#module\_operator) | /Users/biliev/projects/materialize/terraform-materialize/terraform-helm-materialize | n/a |
+| <a name="module_operator"></a> [operator](#module\_operator) | github.com/MaterializeInc/terraform-helm-materialize | n/a |
 | <a name="module_storage"></a> [storage](#module\_storage) | ./modules/storage | n/a |
 
 ## Resources
