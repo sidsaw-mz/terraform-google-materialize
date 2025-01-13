@@ -57,8 +57,10 @@ module "storage" {
 }
 
 module "operator" {
-  source = "./modules/operator"
-  count  = var.install_materialize_operator ? 1 : 0
+  source = "/Users/biliev/projects/materialize/terraform-materialize/terraform-helm-materialize"
+  # source = "github.com/MaterializeInc/terraform-helm-materialize"
+
+  count = var.install_materialize_operator ? 1 : 0
 
   depends_on = [
     module.gke,
@@ -66,32 +68,68 @@ module "operator" {
     module.storage
   ]
 
-  region                     = var.region
-  prefix                     = var.prefix
-  operator_namespace         = var.namespace
-  storage_bucket_name        = module.storage.bucket_name
-  workload_identity_sa_email = module.gke.workload_identity_sa_email
-  hmac_access_id             = module.storage.hmac_access_id
-  hmac_secret                = module.storage.hmac_secret
-  operator_version           = var.operator_version
-  environmentd_version       = var.environmentd_version
+  namespace          = var.namespace
+  environment        = var.prefix
+  operator_version   = var.operator_version
+  operator_namespace = var.operator_namespace
 
-  instances = var.materialize_instances != null ? [
-    for instance in var.materialize_instances : {
-      name              = instance.name
-      namespace         = instance.namespace
-      database_name     = instance.database_name
-      database_username = var.database_config.username
-      database_password = var.database_config.password
-      database_host     = module.database.private_ip
-      cpu_request       = instance.cpu_request
-      memory_request    = instance.memory_request
-      memory_limit      = instance.memory_limit
-    }
-  ] : []
+  helm_values = local.merged_helm_values
+
+  instances = local.instances
 
   providers = {
     kubernetes = kubernetes
     helm       = helm
   }
 }
+
+locals {
+  default_helm_values = {
+    operator = {
+      cloudProvider = {
+        type   = "gcp"
+        region = data.google_client_config.current.region
+        providers = {
+          gcp = {
+            enabled = true
+          }
+        }
+      }
+    }
+  }
+
+  merged_helm_values = merge(local.default_helm_values, var.helm_values)
+}
+
+locals {
+  instances = [
+    for instance in var.materialize_instances : {
+      name          = instance.name
+      namespace     = instance.namespace
+      database_name = instance.database_name
+
+      metadata_backend_url = format(
+        "postgres://%s:%s@%s:5432/%s?sslmode=disable",
+        var.database_config.username,
+        var.database_config.password,
+        module.database.private_ip,
+        coalesce(instance.database_name, instance.name)
+      )
+
+      persist_backend_url = format(
+        "s3://%s:%s@%s/materialize?endpoint=%s&region=%s",
+        module.storage.hmac_access_id,
+        local.encoded_secret,
+        module.storage.bucket_name,
+        local.encoded_endpoint,
+        var.region
+      )
+
+      cpu_request    = instance.cpu_request
+      memory_request = instance.memory_request
+      memory_limit   = instance.memory_limit
+    }
+  ]
+}
+
+data "google_client_config" "current" {}
