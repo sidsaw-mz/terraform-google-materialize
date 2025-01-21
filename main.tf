@@ -85,6 +85,9 @@ module "operator" {
 locals {
   default_helm_values = {
     operator = {
+      image = {
+        tag = var.orchestratord_version
+      }
       cloudProvider = {
         type   = "gcp"
         region = data.google_client_config.current.region

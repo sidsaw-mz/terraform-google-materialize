@@ -89,13 +89,19 @@ variable "helm_values" {
   default     = {}
 }
 
+variable "orchestratord_version" {
+  description = "Version of the Materialize orchestrator to install"
+  type        = string
+  default     = "v0.130.0"
+}
+
 variable "materialize_instances" {
   description = "Configuration for Materialize instances"
   type = list(object({
     name                 = string
     namespace            = optional(string)
     database_name        = string
-    environmentd_version = optional(string, "v0.127.1")
+    environmentd_version = optional(string, "v0.130.0")
     cpu_request          = optional(string, "1")
     memory_request       = optional(string, "1Gi")
     memory_limit         = optional(string, "1Gi")
