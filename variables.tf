@@ -76,3 +76,47 @@ variable "labels" {
   type        = map(string)
   default     = {}
 }
+
+variable "install_materialize_operator" {
+  description = "Whether to install the Materialize operator"
+  type        = bool
+  default     = false
+}
+
+variable "helm_values" {
+  description = "Values to pass to the Helm chart"
+  type        = any
+  default     = {}
+}
+
+variable "orchestratord_version" {
+  description = "Version of the Materialize orchestrator to install"
+  type        = string
+  default     = "v0.130.0"
+}
+
+variable "materialize_instances" {
+  description = "Configuration for Materialize instances"
+  type = list(object({
+    name                 = string
+    namespace            = optional(string)
+    database_name        = string
+    environmentd_version = optional(string, "v0.130.0")
+    cpu_request          = optional(string, "1")
+    memory_request       = optional(string, "1Gi")
+    memory_limit         = optional(string, "1Gi")
+  }))
+  default = []
+}
+
+variable "operator_version" {
+  description = "Version of the Materialize operator to install"
+  type        = string
+  default     = "v25.1.0-beta.1"
+}
+
+variable "operator_namespace" {
+  description = "Namespace for the Materialize operator"
+  type        = string
+  default     = "materialize"
+}
