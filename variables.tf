@@ -30,7 +30,7 @@ variable "network_config" {
 }
 
 variable "gke_config" {
-  description = "GKE cluster configuration"
+  description = "GKE cluster configuration. Make sure to use large enough machine types for your Materialize instances."
   type = object({
     node_count     = number
     machine_type   = string
