@@ -39,25 +39,7 @@ module "materialize" {
   install_materialize_operator = true
 
   # Once the operator is installed, you can define your Materialize instances here.
-  # Uncomment the following block (or provide your own instances) to configure them.
-  # materialize_instances = [
-  #   {
-  #     name           = "analytics"
-  #     namespace      = "materialize-environment"
-  #     database_name  = "analytics_db"
-  #     cpu_request    = "2"
-  #     memory_request = "4Gi"
-  #     memory_limit   = "4Gi"
-  #   },
-  #   {
-  #     name           = "demo"
-  #     namespace      = "materialize-environment"
-  #     database_name  = "demo_db"
-  #     cpu_request    = "2"
-  #     memory_request = "8Gi"
-  #     memory_limit   = "8Gi"
-  #   }
-  # ]
+  materialize_instances = var.materialize_instances
 }
 
 variable "project_id" {
@@ -73,7 +55,7 @@ variable "region" {
 
 variable "database_password" {
   description = "Password for Cloud SQL database user"
-  default     = "your-strong-password-here"
+  default     = "your-strong-password"
   type        = string
   sensitive   = true
 }
@@ -93,4 +75,17 @@ output "connection_strings" {
   description = "Connection strings for metadata and persistence backends"
   value       = module.materialize.connection_strings
   sensitive   = true
+}
+
+variable "materialize_instances" {
+  description = "List of Materialize instances to be created."
+  type = list(object({
+    name           = string
+    namespace      = string
+    database_name  = string
+    cpu_request    = string
+    memory_request = string
+    memory_limit   = string
+  }))
+  default = []
 }
