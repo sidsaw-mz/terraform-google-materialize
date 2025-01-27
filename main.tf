@@ -57,9 +57,11 @@ module "storage" {
 }
 
 module "operator" {
-  source = "github.com/MaterializeInc/terraform-helm-materialize?ref=v0.1.1"
+  source = "github.com/MaterializeInc/terraform-helm-materialize?ref=v0.1.2"
 
   count = var.install_materialize_operator ? 1 : 0
+
+  install_metrics_server = var.install_metrics_server
 
   depends_on = [
     module.gke,
@@ -84,6 +86,11 @@ module "operator" {
 
 locals {
   default_helm_values = {
+    observability = {
+      podMetrics = {
+        enabled = true
+      }
+    }
     operator = {
       image = {
         tag = var.orchestratord_version

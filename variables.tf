@@ -120,3 +120,9 @@ variable "operator_namespace" {
   type        = string
   default     = "materialize"
 }
+
+variable "install_metrics_server" {
+  description = "Whether to install the metrics-server for the Materialize Console"
+  type        = bool
+  default     = true
+}
