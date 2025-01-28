@@ -62,6 +62,12 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
   --role="roles/servicenetworking.networksAdmin"
 ```
 
+Install the GKE `gcloud` authentication plugin to interact with GKE clusters
+
+```bash
+gcloud components install gke-gcloud-auth-plugin --project=$PROJECT_ID
+```
+
 ## Setting Up Terraform
 
 ### 1. Authentication
