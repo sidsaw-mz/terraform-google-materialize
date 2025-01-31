@@ -57,7 +57,7 @@ module "storage" {
 }
 
 module "operator" {
-  source = "github.com/MaterializeInc/terraform-helm-materialize?ref=v0.1.2"
+  source = "github.com/MaterializeInc/terraform-helm-materialize?ref=v0.1.3"
 
   count = var.install_materialize_operator ? 1 : 0
 
@@ -113,9 +113,10 @@ locals {
 locals {
   instances = [
     for instance in var.materialize_instances : {
-      name          = instance.name
-      namespace     = instance.namespace
-      database_name = instance.database_name
+      name            = instance.name
+      namespace       = instance.namespace
+      database_name   = instance.database_name
+      create_database = instance.create_database
 
       metadata_backend_url = format(
         "postgres://%s:%s@%s:5432/%s?sslmode=disable",
