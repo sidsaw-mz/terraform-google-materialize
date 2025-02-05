@@ -101,6 +101,7 @@ variable "materialize_instances" {
     name                 = string
     namespace            = optional(string)
     database_name        = string
+    create_database      = optional(bool, true)
     environmentd_version = optional(string, "v0.130.1")
     cpu_request          = optional(string, "1")
     memory_request       = optional(string, "1Gi")
