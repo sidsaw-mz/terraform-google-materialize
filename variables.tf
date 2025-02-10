@@ -106,8 +106,29 @@ variable "materialize_instances" {
     cpu_request          = optional(string, "1")
     memory_request       = optional(string, "1Gi")
     memory_limit         = optional(string, "1Gi")
+    in_place_rollout     = optional(bool, false)
+    request_rollout      = optional(string)
+    force_rollout        = optional(string)
   }))
   default = []
+
+  validation {
+    condition = alltrue([
+      for instance in var.materialize_instances :
+      instance.request_rollout == null ||
+      can(regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", instance.request_rollout))
+    ])
+    error_message = "Request rollout must be a valid UUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+  }
+
+  validation {
+    condition = alltrue([
+      for instance in var.materialize_instances :
+      instance.force_rollout == null ||
+      can(regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", instance.force_rollout))
+    ])
+    error_message = "Force rollout must be a valid UUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+  }
 }
 
 variable "operator_version" {
