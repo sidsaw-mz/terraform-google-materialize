@@ -157,7 +157,7 @@ variable "operator_namespace" {
 }
 
 variable "install_metrics_server" {
-  description = "Whether to install the metrics-server for the Materialize Console"
+  description = "Whether to install the metrics-server for the Materialize Console. Defaults to false since GKE installs one by default in the kube-system namespace."
   type        = bool
-  default     = true
+  default     = false
 }
