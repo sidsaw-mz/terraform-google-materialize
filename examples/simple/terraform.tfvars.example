@@ -1,4 +1,6 @@
-database_password = "your-strong-password"
+project_id = "enter-your-gcp-project-id"
+database_password  = "enter-secure-password"
+region = "us-central1"
 
 # Once the operator is installed, you can define your Materialize instances here.
 # Uncomment the following block (or provide your own instances) to configure them:
