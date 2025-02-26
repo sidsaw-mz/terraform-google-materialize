@@ -37,7 +37,6 @@ variable "gke_config" {
     disk_size_gb   = number
     min_nodes      = number
     max_nodes      = number
-    node_locations = list(string)
   })
   default = {
     node_count     = 1
@@ -45,7 +44,6 @@ variable "gke_config" {
     disk_size_gb   = 50
     min_nodes      = 1
     max_nodes      = 2
-    node_locations = []
   }
 }
 
