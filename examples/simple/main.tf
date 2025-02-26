@@ -23,12 +23,12 @@ module "materialize" {
 
   project_id = var.project_id
   region     = var.region
-  prefix     = "mz-simple"
+  prefix     = var.prefix
 
   database_config = {
     tier     = "db-custom-2-4096"
     version  = "POSTGRES_15"
-    password = var.database_password
+    password = random_password.pass.result
   }
 
   labels = {
@@ -53,11 +53,16 @@ variable "region" {
   default     = "us-central1"
 }
 
-variable "database_password" {
-  description = "Password for Cloud SQL database user"
-  default     = "your-strong-password"
+variable "prefix" {
+  description = "Used to prefix the names of the resources"
   type        = string
-  sensitive   = true
+  default     = "mz-simple"
+}
+
+
+resource "random_password" "pass" {
+  length  = 20
+  special = false
 }
 
 output "gke_cluster" {

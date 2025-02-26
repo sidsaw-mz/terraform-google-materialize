@@ -98,27 +98,31 @@ Access the `examples/simple` directory and follow these steps:
    ```bash
    terraform plan \
      -var project_id="your-project-id" \
-     -var database_password="your-secure-password"
+     -var prefix="your-resource-prefix" \
+     -var region="us-central1"
    ```
 
    Alternatively, you can set these variables in a `terraform.tfvars` file:
    ```bash
     project_id = "your-project-id"
-    database_password = "your-secure-password"
+    prefix = "your-resource-prefix"
+    region="your-region"
     ```
 
 3. Apply the changes:
    ```bash
    terraform apply \
      -var project_id="your-project-id" \
-     -var database_password="your-secure-password"
+     -var prefix="your-resource-prefix" \
+     -var region="us-central1"
    ```
 
 4. When you're done, clean up:
    ```bash
    terraform destroy \
      -var project_id="your-project-id" \
-     -var database_password="your-secure-password"
+     -var prefix="your-resource-prefix" \
+     -var region="us-central1"
    ```
 
 5. The `connection_strings` output will provide you with the connection strings for metadata and persistence backends.
