@@ -31,7 +31,7 @@ namespace = "materialize"
 
 # Resource Labels
 labels = {
-  environment = "production"
+  environment = "test"
   team        = "data-platform"
   managed_by  = "terraform"
   cost_center = "12345"

@@ -32,20 +32,18 @@ variable "network_config" {
 variable "gke_config" {
   description = "GKE cluster configuration. Make sure to use large enough machine types for your Materialize instances."
   type = object({
-    node_count     = number
-    machine_type   = string
-    disk_size_gb   = number
-    min_nodes      = number
-    max_nodes      = number
-    node_locations = list(string)
+    node_count   = number
+    machine_type = string
+    disk_size_gb = number
+    min_nodes    = number
+    max_nodes    = number
   })
   default = {
-    node_count     = 1
-    machine_type   = "e2-standard-4"
-    disk_size_gb   = 50
-    min_nodes      = 1
-    max_nodes      = 2
-    node_locations = []
+    node_count   = 1
+    machine_type = "e2-standard-4"
+    disk_size_gb = 50
+    min_nodes    = 1
+    max_nodes    = 2
   }
 }
 

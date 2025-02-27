@@ -1,5 +1,5 @@
 project_id = "enter-your-gcp-project-id"
-database_password  = "enter-secure-password"
+prefix  = "enter-a-prefix" // e.g., mz-simple, my-mz-demo
 region = "us-central1"
 
 # Once the operator is installed, you can define your Materialize instances here.
