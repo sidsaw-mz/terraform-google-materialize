@@ -42,6 +42,9 @@ module "materialize" {
 
   install_materialize_operator = true
 
+  operator_version   = var.operator_version
+  orchestratord_version = var.orchestratord_version
+  
   # Once the operator is installed, you can define your Materialize instances here.
   materialize_instances = var.materialize_instances
 }
@@ -84,6 +87,18 @@ output "connection_strings" {
   description = "Connection strings for metadata and persistence backends"
   value       = module.materialize.connection_strings
   sensitive   = true
+}
+
+variable "operator_version" {
+  description = "Version of the Materialize operator to install"
+  type        = string
+  default     = null
+}
+
+variable "orchestratord_version" {
+  description = "Version of the Materialize orchestrator to install"
+  type        = string
+  default     = "v0.130.4"
 }
 
 variable "materialize_instances" {
