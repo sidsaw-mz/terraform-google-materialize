@@ -42,9 +42,9 @@ module "materialize" {
 
   install_materialize_operator = true
 
-  operator_version   = var.operator_version
+  operator_version      = var.operator_version
   orchestratord_version = var.orchestratord_version
-  
+
   # Once the operator is installed, you can define your Materialize instances here.
   materialize_instances = var.materialize_instances
 }
