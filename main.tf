@@ -123,10 +123,10 @@ locals {
 locals {
   instances = [
     for instance in var.materialize_instances : {
-      name            = instance.name
-      namespace       = instance.namespace
-      database_name   = instance.database_name
-      create_database = instance.create_database
+      name                 = instance.name
+      namespace            = instance.namespace
+      database_name        = instance.database_name
+      create_database      = instance.create_database
       environmentd_version = instance.environmentd_version
 
       metadata_backend_url = format(
