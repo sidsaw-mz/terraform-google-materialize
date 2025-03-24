@@ -71,6 +71,19 @@ module "storage" {
   labels = local.common_labels
 }
 
+module "certificates" {
+  source = "./modules/certificates"
+
+  install_cert_manager           = var.install_cert_manager
+  use_self_signed_cluster_issuer = var.use_self_signed_cluster_issuer
+  cert_manager_namespace         = var.cert_manager_namespace
+  name_prefix                    = var.prefix
+
+  depends_on = [
+    module.gke,
+  ]
+}
+
 module "operator" {
   source = "github.com/MaterializeInc/terraform-helm-materialize?ref=v0.1.8"
 
@@ -81,7 +94,8 @@ module "operator" {
   depends_on = [
     module.gke,
     module.database,
-    module.storage
+    module.storage,
+    module.certificates,
   ]
 
   namespace          = var.namespace
@@ -124,6 +138,34 @@ locals {
         }
       }
     }
+    tls = var.use_self_signed_cluster_issuer ? {
+      defaultCertificateSpecs = {
+        balancerdExternal = {
+          dnsNames = [
+            "balancerd",
+          ]
+          issuerRef = {
+            name = module.certificates.cluster_issuer_name
+            kind = "ClusterIssuer"
+          }
+        }
+        consoleExternal = {
+          dnsNames = [
+            "console",
+          ]
+          issuerRef = {
+            name = module.certificates.cluster_issuer_name
+            kind = "ClusterIssuer"
+          }
+        }
+        internal = {
+          issuerRef = {
+            name = module.certificates.cluster_issuer_name
+            kind = "ClusterIssuer"
+          }
+        }
+      }
+    } : {}
   }
 
   merged_helm_values = merge(local.default_helm_values, var.helm_values)
