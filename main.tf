@@ -125,9 +125,9 @@ locals {
       }
     }
     operator = {
-      image = {
+      image = var.orchestratord_version == null ? {} : {
         tag = var.orchestratord_version
-      }
+      },
       cloudProvider = {
         type   = "gcp"
         region = var.region
