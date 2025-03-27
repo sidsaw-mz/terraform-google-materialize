@@ -98,7 +98,7 @@ variable "helm_values" {
 variable "orchestratord_version" {
   description = "Version of the Materialize orchestrator to install"
   type        = string
-  default     = "v0.130.4"
+  default     = null
 }
 
 variable "materialize_instances" {
@@ -156,4 +156,34 @@ variable "install_metrics_server" {
   description = "Whether to install the metrics-server for the Materialize Console. Defaults to false since GKE installs one by default in the kube-system namespace. Only set to true if the GKE cluster was deployed with [monitoring explicitly turned off](https://cloud.google.com/kubernetes-engine/docs/how-to/configure-metrics#:~:text=To%20disable%20system%20metric%20collection,for%20the%20%2D%2Dmonitoring%20flag). Refer to the [GKE docs](https://cloud.google.com/kubernetes-engine/docs/how-to/configure-metrics#:~:text=To%20disable%20system%20metric%20collection,for%20the%20%2D%2Dmonitoring%20flag) for more information, including impact to GKE customer support efforts."
   type        = bool
   default     = false
+}
+
+variable "install_cert_manager" {
+  description = "Whether to install cert-manager."
+  type        = bool
+  default     = false
+}
+
+variable "use_self_signed_cluster_issuer" {
+  description = "Whether to install and use a self-signed ClusterIssuer for TLS. Due to limitations in Terraform, this may not be enabled before the cert-manager CRDs are installed."
+  type        = bool
+  default     = false
+}
+
+variable "cert_manager_namespace" {
+  description = "The name of the namespace in which cert-manager is or will be installed."
+  type        = string
+  default     = "cert-manager"
+}
+
+variable "cert_manager_install_timeout" {
+  description = "Timeout for installing the cert-manager helm chart, in seconds."
+  type        = number
+  default     = 300
+}
+
+variable "cert_manager_chart_version" {
+  description = "Version of the cert-manager helm chart to install."
+  type        = string
+  default     = "v1.17.1"
 }

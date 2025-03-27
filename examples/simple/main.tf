@@ -72,9 +72,11 @@ module "materialize" {
   }
 
   install_materialize_operator = true
+  operator_version             = var.operator_version
+  orchestratord_version        = var.orchestratord_version
 
-  operator_version      = var.operator_version
-  orchestratord_version = var.orchestratord_version
+  install_cert_manager           = var.install_cert_manager
+  use_self_signed_cluster_issuer = var.use_self_signed_cluster_issuer
 
   # Once the operator is installed, you can define your Materialize instances here.
   materialize_instances = var.materialize_instances
@@ -139,7 +141,7 @@ output "network" {
 variable "orchestratord_version" {
   description = "Version of the Materialize orchestrator to install"
   type        = string
-  default     = "v0.130.4"
+  default     = null
 }
 
 variable "materialize_instances" {
@@ -161,4 +163,16 @@ variable "materialize_instances" {
     balancer_cpu_request    = optional(string, "100m")
   }))
   default = []
+}
+
+variable "install_cert_manager" {
+  description = "Whether to install cert-manager."
+  type        = bool
+  default     = false
+}
+
+variable "use_self_signed_cluster_issuer" {
+  description = "Whether to install and use a self-signed ClusterIssuer for TLS. Due to limitations in Terraform, this may not be enabled before the cert-manager CRDs are installed."
+  type        = bool
+  default     = false
 }
