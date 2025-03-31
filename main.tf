@@ -119,6 +119,22 @@ module "operator" {
   }
 }
 
+module "load_balancers" {
+  source = "./modules/load_balancers"
+
+  for_each = { for idx, instance in local.instances : instance.name => instance if lookup(instance, "create_load_balancer", false) }
+
+  instance_name = each.value.name
+  namespace     = module.operator[0].materialize_instances[each.value.name].namespace
+  resource_id   = module.operator[0].materialize_instance_resource_ids[each.value.name]
+  internal      = each.value.internal_load_balancer
+
+  depends_on = [
+    module.operator,
+    module.gke,
+  ]
+}
+
 locals {
   default_helm_values = {
     observability = {
@@ -176,11 +192,13 @@ locals {
 locals {
   instances = [
     for instance in var.materialize_instances : {
-      name                 = instance.name
-      namespace            = instance.namespace
-      database_name        = instance.database_name
-      create_database      = instance.create_database
-      environmentd_version = instance.environmentd_version
+      name                   = instance.name
+      namespace              = instance.namespace
+      database_name          = instance.database_name
+      create_database        = instance.create_database
+      create_load_balancer   = instance.create_load_balancer
+      internal_load_balancer = instance.internal_load_balancer
+      environmentd_version   = instance.environmentd_version
 
       metadata_backend_url = format(
         "postgres://%s:%s@%s:5432/%s?sslmode=disable",
