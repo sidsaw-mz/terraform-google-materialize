@@ -75,6 +75,8 @@ No resources.
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | Prefix to be used for resource names | `string` | `"materialize"` | no |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The ID of the project where resources will be created | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The region where resources will be created | `string` | `"us-central1"` | no |
+| <a name="input_storage_bucket_version_ttl"></a> [storage\_bucket\_version\_ttl](#input\_storage\_bucket\_version\_ttl) | Sets the TTL (in days) on non current storage bucket objects. This must be set if storage\_bucket\_versioning is turned on. | `number` | `7` | no |
+| <a name="input_storage_bucket_versioning"></a> [storage\_bucket\_versioning](#input\_storage\_bucket\_versioning) | Enable bucket versioning. | `bool` | `true` | no |
 | <a name="input_use_local_chart"></a> [use\_local\_chart](#input\_use\_local\_chart) | Whether to use a local chart instead of one from a repository | `bool` | `false` | no |
 | <a name="input_use_self_signed_cluster_issuer"></a> [use\_self\_signed\_cluster\_issuer](#input\_use\_self\_signed\_cluster\_issuer) | Whether to install and use a self-signed ClusterIssuer for TLS. To work around limitations in Terraform, this will be treated as `false` if no materialize instances are defined. | `bool` | `true` | no |
 
@@ -121,3 +123,11 @@ For existing users upgrading Materialize instances not previously configured for
 5. Update the `request_rollout` field of the Materialize instance.
 6. Run `terraform apply`. This will generate the certificates and configure your Materialize instance to use them.
 <!-- END_TF_DOCS -->
+
+
+
+#### Storage Bucket Versioning
+By default storage bucket versioning is turned off. This both reduces
+costs and allows for easier cleanup of resources for testing. When running in
+production, versioning should be turned on with a sufficient TTL to meet any
+data-recovery requirements. See `storage_bucket_versioning` and `storage_bucket_version_ttl`.

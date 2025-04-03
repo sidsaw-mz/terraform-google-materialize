@@ -24,6 +24,13 @@ variable "labels" {
   default     = {}
 }
 
+
+variable "versioning" {
+  description = "Enable bucket versioning. This should be enabled for production deployments."
+  type        = bool
+  default     = true
+}
+
 variable "lifecycle_rules" {
   description = "List of lifecycle rules to configure"
   type = list(object({
@@ -49,4 +56,11 @@ variable "lifecycle_rules" {
       }
     }
   ]
+}
+
+variable "version_ttl" {
+  description = "Sets the TTL (in days) on non current storage bucket objects. This must be set if versioning is turned on."
+  type        = number
+  default     = 7
+
 }

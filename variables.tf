@@ -160,6 +160,18 @@ variable "install_metrics_server" {
   default     = false
 }
 
+variable "storage_bucket_versioning" {
+  description = "Enable bucket versioning. This should be enabled for production deployments."
+  type        = bool
+  default     = false
+}
+
+variable "storage_bucket_version_ttl" {
+  description = "Sets the TTL (in days) on non current storage bucket objects. This must be set if storage_bucket_versioning is turned on."
+  type        = number
+  default     = 7
+}
+
 variable "install_cert_manager" {
   description = "Whether to install cert-manager."
   type        = bool
