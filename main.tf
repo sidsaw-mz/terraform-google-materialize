@@ -89,7 +89,7 @@ module "certificates" {
 }
 
 module "operator" {
-  source = "github.com/MaterializeInc/terraform-helm-materialize?ref=v0.1.10"
+  source = "github.com/MaterializeInc/terraform-helm-materialize?ref=v0.1.11"
 
   count = var.install_materialize_operator ? 1 : 0
 
@@ -218,6 +218,8 @@ locals {
         local.encoded_endpoint,
         var.region
       )
+
+      license_key = instance.license_key
 
       cpu_request    = instance.cpu_request
       memory_request = instance.memory_request
