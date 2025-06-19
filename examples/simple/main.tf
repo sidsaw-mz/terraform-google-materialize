@@ -110,6 +110,11 @@ resource "random_password" "pass" {
   special = false
 }
 
+resource "random_password" "analytics_mz_system" {
+  length  = 20
+  special = true
+}
+
 output "gke_cluster" {
   description = "GKE cluster details"
   value       = module.materialize.gke_cluster
