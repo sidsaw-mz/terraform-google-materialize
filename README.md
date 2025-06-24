@@ -20,7 +20,7 @@ This module sets up:
 The module has been tested with:
 - GKE version 1.28
 - PostgreSQL 15
-- terraform-helm-materialize v0.1.12 (Materialize Operator v25.1.7)
+- terraform-helm-materialize v0.1.12+ (Materialize Operator 25.1.7+)
 
 ## Disk Support for Materialize on GCP
 
