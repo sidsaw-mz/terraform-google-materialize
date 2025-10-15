@@ -66,6 +66,41 @@ module "materialize" {
     password = random_password.pass.result
   }
 
+  helm_values = {
+    clusterd = {
+      node_selector_term = {
+        match_expressions = {
+          key      = "materialize.cloud/disk"
+          operator = "In"
+          values   = ["true"]
+        }
+      }
+      affinity = {
+        cpu_affinity = "false"
+      }
+    }
+    operator = {
+      clusters = {
+        swap_enabled = "true"
+        sizes = {
+          swap_cc = {
+            workers = 1
+            scale = 1
+            cpu_exclusive = "false"
+            cpu_limit = 0.1
+            credits_per_hour = 0.00
+            disk_limit = "0MiB"
+            memory_request = "775MiB"
+            memory_limit = "776MiB"
+            selectors = {
+              "materialize.cloud/swap" = "true"
+            }
+          }
+        }
+      }
+    }
+  }
+
   labels = {
     environment = "simple"
     example     = "true"
